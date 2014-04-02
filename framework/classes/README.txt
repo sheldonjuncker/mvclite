@@ -1,0 +1,1 @@
+Class files placed within the `auto` folder will be loaded automatically on every page. The classes in the `manual` folder must be loaded manually--usually in a controller file by: $this->class("name");
