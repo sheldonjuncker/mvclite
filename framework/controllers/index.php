@@ -9,7 +9,7 @@ class Controller_index extends Controller
 	
 	public function error($e = "?")
 	{
-		die("Fatal Error: The page <b>$e</b> could not be found!");
+		die("The page <b>$e</b> could not be found!");
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-class MVClite
+class MVC
 {
 	#Base Path
 	public static $base_path;
@@ -105,7 +105,7 @@ class MVClite
 				else
 				{
 					$m = array_shift($uri);
-					if(method_exists($c, $m))
+					if(in_array($m, get_class_methods($c)))
 					{
 						call_user_func_array(array($c, $m), $uri);
 					}
@@ -122,8 +122,9 @@ class MVClite
 						
 						else
 						{
+							array_unshift($uri, $m);
 							//No Method
-							if(method_exists($c, "error"))
+							if(in_array("error", get_class_methods($c)))
 								call_user_func_array(array($c, "error"), $uri);
 							else
 								$index->error($m);
@@ -132,7 +133,7 @@ class MVClite
 				}
 			}
 			
-			else if(method_exists($index, $com))
+			else if(in_array($com, get_class_methods($index)))
 			{
 				//Method of Index
 				call_user_func_array(array($index, $com), $uri);
