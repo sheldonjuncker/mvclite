@@ -4,7 +4,10 @@ class Controller_index extends Controller
 {
 	public function index()
 	{
-		print "Welcome to MVCLite!";
+		$data = array(
+			"msg" => "<p>Welcome to MVClite!</p>"
+		);
+		$this->view("index", $data, true);
 	}
 	
 	public function error($e = "?")

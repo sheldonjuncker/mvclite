@@ -141,8 +141,12 @@ class MVC
 			
 			else
 			{
-				//No Controller or Method
-				$index->error($com);
+				$i = new ReflectionMethod($index, "index");
+				$pnum = $i->getNumberOfParameters();
+				if($pnum > 0)
+					call_user_func(array($index, "index", $uri));
+				else
+					call_user_func(array($index, "error", $uri));
 			}
 		}
 	}
