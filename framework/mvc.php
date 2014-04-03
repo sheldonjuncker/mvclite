@@ -141,12 +141,13 @@ class MVC
 			
 			else
 			{
+				array_unshift($uri, $com);
 				$i = new ReflectionMethod($index, "index");
 				$pnum = $i->getNumberOfParameters();
 				if($pnum > 0)
-					call_user_func(array($index, "index", $uri));
+					call_user_func_array(array($index, "index"), $uri);
 				else
-					call_user_func(array($index, "error", $uri));
+					call_user_func_array(array($index, "error"), $uri);
 			}
 		}
 	}

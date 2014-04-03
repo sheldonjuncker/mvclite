@@ -13,7 +13,7 @@ class Post
 		{
 			if(!isset($this->$key))
 			{
-				if($this->varname($key))
+				if(varname($key))
 				{
 					$this->set($key, sanitize($value));
 					$this->num++;
@@ -34,13 +34,6 @@ class Post
 		unset($_POST);
 	}
 	
-	public function varname($name)
-	{
-		if(preg_match("/^[_a-zA-Z][_a-zA-Z0-9]*$/", $name))
-			return true;
-		return false;
-	}
-	
 	public function sanitize($value)
 	{
 		#Add Necessary Sanitization Here
@@ -49,7 +42,7 @@ class Post
 	
 	public function set($key, $value = false)
 	{
-		if($this->varname($key))
+		if(varname($key))
 		{
 			$this->$key = $value;
 			$this->all[$key] = $value;

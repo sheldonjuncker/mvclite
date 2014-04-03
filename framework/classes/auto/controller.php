@@ -7,9 +7,13 @@ class Controller
 		$view_path = MVC::getPath("views") . "/$name.php";
 		if(file_exists($view_path))
 		{
-			if(count($data) > 0)
+			if(is_array($data))
 			{
-				extract($data, EXTR_SKIP);
+				foreach($data as $key => $value)
+				{
+					if(is_string($key) AND varname($key) AND !isset(${$key}))
+						${$key} = $value;
+				}
 			}
 			
 			if($template)
@@ -20,12 +24,12 @@ class Controller
 				foreach($matches as $m)
 				{
 					$ms = substr($m, 1, -1);
-					if(isset($data[$ms]))
+					if(isset(${$ms}))
 					{
-						$view = str_replace($m, $data[$ms], $view);
+						$view = str_replace($m, ${$ms}, $view);
 					}
 				}
-				eval("?>" . $view . "<?php");
+				eval('?>' . $view);
 			}
 			
 			else
