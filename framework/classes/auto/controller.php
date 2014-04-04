@@ -1,7 +1,9 @@
 <?php
 
 class Controller
-{	
+{
+	protected $cache = null;
+	
 	protected function view($name, $data = array(), $template = false)
 	{
 		$view_path = MVC::getPath("views") . "/$name.php";
@@ -65,6 +67,51 @@ class Controller
 		else
 		{
 			die("Model $name does not exist.");
+		}
+	}
+	
+	protected function cache($name, $data = array(), $template = false)
+	{
+		if($this->cache == null)
+		{
+			$class = MVC::getPath("classes/manual/cache.php");
+			require_once($class);
+			
+			$this->cache = new Cache();
+		}
+		
+		$this->cache->connect();
+		
+		if(($view = $this->cache->get($name)) != "no")
+		{
+			if(is_array($data))
+			{
+				foreach($data as $key => $value)
+				{
+					if(is_string($key) AND varname($key) AND !isset(${$key}))
+						${$key} = $value;
+				}
+			}
+			
+			if($template)
+			{
+				preg_match_all("/\{[a-zA-Z0-9_]+\}/", $view, $matches);
+				$matches = $matches[0];
+				foreach($matches as $m)
+				{
+					$ms = substr($m, 1, -1);
+					if(isset(${$ms}))
+					{
+						$view = str_replace($m, ${$ms}, $view);
+					}
+				}
+			}
+			eval('?>' . $view);
+		}
+		
+		else
+		{
+			$this->view($name, $data, $template);
 		}
 	}
 	
