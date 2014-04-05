@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 class Cache
 {
 	#State
@@ -11,6 +13,9 @@ class Cache
 	#Socket
 	private $socket = null;
 	
+	#Maxlength to Read
+	private $max = 1000000;
+	
 	#Connect To Server
 	public function connect($host = "127.0.0.1", $port = 1994)
 	{
@@ -18,12 +23,14 @@ class Cache
 			OR
 		$this->errors[] = "Could not create socket on $host:$port.";
 		
-		@socket_connect($socket, $host, $port)
+		@socket_connect($this->socket, $host, $port)
 			OR
 		$this->errors[] = "Could not connect to socket on $host:$port";
 		
-		if(count($errors) == 0 AND $socket != NULL)
+		if(count($this->errors) == 0 AND $this->socket != NULL)
 			$this->state = "ok";
+			
+		print $this->state;
 	}
 	
 	#Server Action

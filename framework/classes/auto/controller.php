@@ -70,51 +70,6 @@ class Controller
 		}
 	}
 	
-	protected function cache($name, $data = array(), $template = false)
-	{
-		if($this->cache == null)
-		{
-			$class = MVC::getPath("classes/manual/cache.php");
-			require_once($class);
-			
-			$this->cache = new Cache();
-		}
-		
-		$this->cache->connect();
-		
-		if(($view = $this->cache->get($name)) != "no")
-		{
-			if(is_array($data))
-			{
-				foreach($data as $key => $value)
-				{
-					if(is_string($key) AND varname($key) AND !isset(${$key}))
-						${$key} = $value;
-				}
-			}
-			
-			if($template)
-			{
-				preg_match_all("/\{[a-zA-Z0-9_]+\}/", $view, $matches);
-				$matches = $matches[0];
-				foreach($matches as $m)
-				{
-					$ms = substr($m, 1, -1);
-					if(isset(${$ms}))
-					{
-						$view = str_replace($m, ${$ms}, $view);
-					}
-				}
-			}
-			eval('?>' . $view);
-		}
-		
-		else
-		{
-			$this->view($name, $data, $template);
-		}
-	}
-	
 	protected function css($name, $data = array())
 	{
 		$css_path = MVC::getPath('css') . "/$name.css";
